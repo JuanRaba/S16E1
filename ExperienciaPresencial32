@@ -1,0 +1,36 @@
+https://www.draw.io/#G14McGRqb1FpkSLf_x83-hM-xFYB6jyTO5
+
+CREATE DATABASE pintagram;
+\c pintagram;
+
+users: id, name
+CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(15));
+INSERT INTO users (name) values ('Carlos');
+INSERT INTO users (name) values ('Juan');
+INSERT INTO users (name) values ('Mercedes');
+
+images: id, url, user_id
+CREATE TABLE images (id SERIAL PRIMARY KEY, url VARCHAR(25), user_id INTEGER, FOREIGN KEY (user_id) REFERENCES users(id) );
+INSERT INTO images (url, user_id) values ('http://image.png',3);
+INSERT INTO images (url, user_id) values ('http://image.jpg',3);
+
+likes: user_id, img_id
+CREATE TABLE likes ( user_id INTEGER, FOREIGN KEY (user_id) REFERENCES users(id), img_id INTEGER, FOREIGN KEY (img_id) REFERENCES images(id), PRIMARY KEY (user_id,img_id) );
+
+INSERT INTO likes (user_id, img_id) values (1,3);
+
+tags: id, name
+CREATE TABLE tags (id SERIAL PRIMARY KEY, name VARCHAR(15));
+INSERT INTO tags (name) values ('gatos'),('perros'),('pajaros'),('monos');
+INSERT INTO tags (name) values ('x'),('xxx'),('xxxx'),('xxxxx');
+
+img_tag: tag_id, img_id
+CREATE TABLE img_tag ( tag_id INTEGER, FOREIGN KEY (tag_id) REFERENCES tags(id), img_id INTEGER, FOREIGN KEY (img_id) REFERENCES images(id), PRIMARY KEY (tag_id,img_id) );
+
+INSERT INTO img_tag (tag_id, img_id) values (1..8,1..6x3);
+
+select url, count(*) from images, likes WHERE images.id = likes.img_id GROUP BY url;
+
+select name, url from images, users WHERE images.user_id = users.id;
+
+select name, count(*) from tags, img_tag WHERE tags.id = img_tag.tag_id GROUP BY name;
