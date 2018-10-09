@@ -1,0 +1,4 @@
+  name VARCHAR(25),
+  id SERIAL PRIMARY KEY,
+  stock INTEGER,
+  ponderacion INTEGER,
